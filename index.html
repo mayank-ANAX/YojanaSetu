@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>भारत योजना | India Schemes Explorer</title>
+<meta name="description" content="Discover all Indian government schemes state-wise. Find eligibility, documents, and apply online or offline.">
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#f8f9ff;--surface:#ffffff;--surface2:#f1f3ff;--border:#e2e5f5;
+    --text:#1a1d3a;--text2:#4a5080;--text3:#8890b5;
+    --primary:#4361ee;--primary-light:#eef1ff;--primary-dark:#2d46c4;
+    --green:#10b981;--green-light:#ecfdf5;--orange:#f59e0b;--orange-light:#fffbeb;
+    --red:#ef4444;--red-light:#fef2f2;--purple:#8b5cf6;--purple-light:#f5f3ff;
+    --shadow:0 1px 3px rgba(67,97,238,.08),0 4px 16px rgba(67,97,238,.06);
+    --shadow-lg:0 8px 32px rgba(67,97,238,.14);
+    --radius:12px;--radius-lg:20px;--radius-sm:8px;
+    --transition:all .2s cubic-bezier(.4,0,.2,1);
+  }
+  .dark{
+    --bg:#0f1117;--surface:#1a1d2e;--surface2:#242740;--border:#2d3155;
+    --text:#f0f2ff;--text2:#a0a8d8;--text3:#5560a0;
+    --primary:#6b83f5;--primary-light:#1a1f40;--primary-dark:#8fa0ff;
+    --green:#34d399;--green-light:#052e16;--orange:#fbbf24;--orange-light:#2a1f05;
+    --red:#f87171;--red-light:#2a0f0f;--purple:#a78bfa;--purple-light:#1e1330;
+    --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.4);
+    --shadow-lg:0 8px 32px rgba(0,0,0,.5);
+  }
+  body{font-family:'Inter','Noto Sans Devanagari',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:var(--transition)}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-size:14px;font-weight:500;transition:var(--transition);text-decoration:none}
+  .btn-primary{background:var(--primary);color:#fff}
+  .btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(67,97,238,.3)}
+  .btn-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
+  .btn-outline:hover{background:var(--primary-light)}
+  .btn-ghost{background:transparent;color:var(--text2);border:1.5px solid var(--border)}
+  .btn-ghost:hover{background:var(--surface2);color:var(--text)}
+  .btn-sm{padding:7px 14px;font-size:13px}
+  .card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);transition:var(--transition)}
+  .card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500}
+  .badge-blue{background:var(--primary-light);color:var(--primary)}
+  .badge-green{background:var(--green-light);color:var(--green)}
+  .badge-orange{background:var(--orange-light);color:var(--orange)}
+  .badge-red{background:var(--red-light);color:var(--red)}
+  .badge-purple{background:var(--purple-light);color:var(--purple)}
+  input,select,textarea{background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;font-size:14px;font-family:inherit;width:100%;transition:var(--transition);outline:none}
+  input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(67,97,238,.12)}
+  .stars{display:flex;gap:2px}
+  .star{cursor:pointer;font-size:20px;color:var(--border);transition:var(--transition)}
+  .star.active{color:#f59e0b}
+  ::-webkit-scrollbar{width:6px}
+  ::-webkit-scrollbar-track{background:var(--surface2)}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+  .chat-bubble-user{background:var(--primary);color:#fff;border-radius:18px 18px 4px 18px;padding:10px 16px;max-width:80%;margin-left:auto;font-size:14px}
+  .chat-bubble-ai{background:var(--surface2);color:var(--text);border-radius:18px 18px 18px 4px;padding:10px 16px;max-width:80%;font-size:14px}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .fade-in{animation:fadeIn .3s ease}
+  .spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+  .typing-dot{width:6px;height:6px;background:var(--text3);border-radius:50%;animation:spin .8s ease-in-out infinite}
+  @media(max-width:768px){.hide-mobile{display:none!important}.grid-2{grid-template-columns:1fr!important}.grid-3{grid-template-columns:1fr!important}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ─── DATA ───────────────────────────────────────────────────────────────────
+
+const TRANSLATIONS = {
+  en: {
+    appName: "India Schemes Explorer",
+    tagline: "Discover government schemes made for you",
+    searchPlaceholder: "Search schemes by name, category...",
+    allStates: "All States",
+    allCategories: "All Categories",
+    featuredSchemes: "Featured Schemes",
+    browseByState: "Browse by State",
+    howItWorks: "How It Works",
+    learnMore: "Learn More",
+    applyNow: "Apply Now",
+    bookmarkSave: "Bookmark",
+    bookmarked: "Saved",
+    reviews: "Reviews",
+    writeReview: "Write a Review",
+    submitReview: "Submit Review",
+    yourName: "Your Name",
+    yourReview: "Your review...",
+    rating: "Rating",
+    documents: "Required Documents",
+    eligibility: "Eligibility",
+    applyOnline: "Apply Online",
+    applyOffline: "Offline Application",
+    officialWebsite: "Official Website",
+    importantDates: "Important Dates",
+    category: "Category",
+    state: "State",
+    backToList: "← Back",
+    darkMode: "Dark Mode",
+    chatTitle: "AI Scheme Assistant",
+    chatPlaceholder: "Ask about any scheme...",
+    send: "Send",
+    noSchemes: "No schemes found. Try adjusting filters.",
+    savedSchemes: "Saved Schemes",
+    home: "Home",
+    schemes: "Schemes",
+    chat: "AI Chat",
+    saved: "Saved",
+    myProfile: "Profile",
+    trending: "Trending",
+    new: "New",
+    central: "Central",
+    step1: "Choose Your State",
+    step2: "Pick a Category",
+    step3: "Apply Online",
+    step1Desc: "Select your state to see relevant schemes",
+    step2Desc: "Filter by education, health, agriculture & more",
+    step3Desc: "Apply directly on official government portals",
+    recommend: "Recommended for You",
+    age: "Age",
+    income: "Annual Income (₹)",
+    getRecommendations: "Get Recommendations ↗",
+    login: "Login",
+    logout: "Logout",
+    loginTitle: "Sign In",
+    username: "Username",
+    password: "Password",
+    signIn: "Sign In",
+    signUp: "Sign Up",
+    demoHint: "Demo: user / pass123",
+  },
+  hi: {
+    appName: "भारत योजना एक्सप्लोरर",
+    tagline: "आपके लिए बनाई गई सरकारी योजनाएं खोजें",
+    searchPlaceholder: "योजना का नाम या श्रेणी खोजें...",
+    allStates: "सभी राज्य",
+    allCategories: "सभी श्रेणियां",
+    featuredSchemes: "प्रमुख योजनाएं",
+    browseByState: "राज्य के अनुसार",
+    howItWorks: "यह कैसे काम करता है",
+    learnMore: "अधिक जानें",
+    applyNow: "आवेदन करें",
+    bookmarkSave: "सहेजें",
+    bookmarked: "सहेजा गया",
+    reviews: "समीक्षाएं",
+    writeReview: "समीक्षा लिखें",
+    submitReview: "समीक्षा जमा करें",
+    yourName: "आपका नाम",
+    yourReview: "आपकी समीक्षा...",
+    rating: "रेटिंग",
+    documents: "आवश्यक दस्तावेज़",
+    eligibility: "पात्रता",
+    applyOnline: "ऑनलाइन आवेदन",
+    applyOffline: "ऑफलाइन आवेदन",
+    officialWebsite: "आधिकारिक वेबसाइट",
+    importantDates: "महत्वपूर्ण तिथियां",
+    category: "श्रेणी",
+    state: "राज्य",
+    backToList: "← वापस",
+    darkMode: "डार्क मोड",
+    chatTitle: "AI योजना सहायक",
+    chatPlaceholder: "किसी भी योजना के बारे में पूछें...",
+    send: "भेजें",
+    noSchemes: "कोई योजना नहीं मिली।",
+    savedSchemes: "सहेजी गई योजनाएं",
+    home: "होम", schemes: "योजनाएं", chat: "AI चैट", saved: "सहेजें", myProfile: "प्रोफ़ाइल",
+    trending: "ट्रेंडिंग", new: "नया", central: "केंद्रीय",
+    step1: "अपना राज्य चुनें", step2: "श्रेणी चुनें", step3: "ऑनलाइन आवेदन करें",
+    step1Desc: "संबंधित योजनाएं देखने के लिए राज्य चुनें",
+    step2Desc: "शिक्षा, स्वास्थ्य, कृषि आदि से फ़िल्टर करें",
+    step3Desc: "सरकारी पोर्टल पर सीधे आवेदन करें",
+    recommend: "आपके लिए अनुशंसित", age: "आयु", income: "वार्षिक आय (₹)",
+    getRecommendations: "अनुशंसाएं प्राप्त करें ↗",
+    login: "लॉगिन", logout: "लॉगआउट", loginTitle: "साइन इन",
+    username: "उपयोगकर्ता नाम", password: "पासवर्ड",
+    signIn: "साइन इन", signUp: "साइन अप", demoHint: "डेमो: user / pass123",
+  },
+  mr: {
+    appName: "भारत योजना एक्सप्लोरर",
+    tagline: "तुमच्यासाठी बनवलेल्या सरकारी योजना शोधा",
+    searchPlaceholder: "योजनेचे नाव किंवा श्रेणी शोधा...",
+    allStates: "सर्व राज्ये",
+    allCategories: "सर्व श्रेणी",
+    featuredSchemes: "प्रमुख योजना",
+    browseByState: "राज्यानुसार पहा",
+    howItWorks: "हे कसे काम करते",
+    learnMore: "अधिक जाणा",
+    applyNow: "अर्ज करा",
+    bookmarkSave: "जतन करा",
+    bookmarked: "जतन केले",
+    reviews: "पुनरावलोकने",
+    writeReview: "पुनरावलोकन लिहा",
+    submitReview: "पुनरावलोकन सादर करा",
+    yourName: "तुमचे नाव",
+    yourReview: "तुमचे पुनरावलोकन...",
+    rating: "रेटिंग",
+    documents: "आवश्यक कागदपत्रे",
+    eligibility: "पात्रता",
+    applyOnline: "ऑनलाइन अर्ज",
+    applyOffline: "ऑफलाइन अर्ज",
+    officialWebsite: "अधिकृत वेबसाइट",
+    importantDates: "महत्त्वाच्या तारखा",
+    category: "श्रेणी",
+    state: "राज्य",
+    backToList: "← मागे",
+    darkMode: "डार्क मोड",
+    chatTitle: "AI योजना सहाय्यक",
+    chatPlaceholder: "कोणत्याही योजनेबद्दल विचारा...",
+    send: "पाठवा",
+    noSchemes: "कोणतीही योजना आढळली नाही.",
+    savedSchemes: "जतन केलेल्या योजना",
+    home: "होम", schemes: "योजना", chat: "AI चॅट", saved: "जतन", myProfile: "प्रोफाइल",
+    trending: "ट्रेंडिंग", new: "नवीन", central: "केंद्रीय",
+    step1: "तुमचे राज्य निवडा", step2: "श्रेणी निवडा", step3: "ऑनलाइन अर्ज करा",
+    step1Desc: "संबंधित योजना पाहण्यासाठी राज्य निवडा",
+    step2Desc: "शिक्षण, आरोग्य, शेती इत्यादींनी फिल्टर करा",
+    step3Desc: "सरकारी पोर्टलवर थेट अर्ज करा",
+    recommend: "तुमच्यासाठी शिफारस", age: "वय", income: "वार्षिक उत्पन्न (₹)",
+    getRecommendations: "शिफारसी मिळवा ↗",
+    login: "लॉगिन", logout: "लॉगआउट", loginTitle: "साइन इन",
+    username: "वापरकर्तानाव", password: "पासवर्ड",
+    signIn: "साइन इन", signUp: "साइन अप", demoHint: "डेमो: user / pass123",
+  }
+};
+
+const STATES = [
+  "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Delhi (NCT)","Chandigarh","Central Government"
+];
+
+const CATEGORIES = ["Education","Agriculture","Health","Women & Child","Housing","Employment","Finance","Social Welfare","Skill Development","Minorities","Elderly","Disability","Sports","Environment"];
+
+const SCHEMES = [
+  {id:1,name:"PM Kisan Samman Nidhi",nameHi:"पीएम किसान सम्मान निधि",nameMr:"पीएम किसान सम्मान निधी",state:"Central Government",category:"Agriculture",shortDesc:"₹6,000 annual income support for farmers in 3 installments.",shortDescHi:"किसानों को ₹6,000 वार्षिक आय सहायता तीन किस्तों में।",shortDescMr:"शेतकऱ्यांना ₹6,000 वार्षिक उत्पन्न सहाय्य तीन हप्त्यांमध्ये.",eligibility:"All land-holding farmers. Must have valid Aadhaar & bank account.",eligibilityHi:"सभी भूमिधारक किसान। आधार और बैंक खाता आवश्यक।",eligibilityMr:"सर्व जमीन मालक शेतकरी. आधार व बँक खाते आवश्यक.",documents:["Aadhaar Card","Land Records (Khasra/Khatauni)","Bank Passbook","Passport Size Photo","Mobile Number"],fullDesc:"The PM-KISAN scheme provides financial support of ₹6,000 per year to all landholding farmer families across India. The amount is transferred directly to their bank accounts in three equal installments of ₹2,000 every four months. This initiative aims to supplement financial needs of the farmers in procuring inputs to ensure proper crop health.",onlineLink:"https://pmkisan.gov.in",offlineInfo:"Visit nearest Common Service Centre (CSC) or Krishi Vigyan Kendra with documents.",importantDates:"Enrollment: Open year-round | Installments: Apr-Jul, Aug-Nov, Dec-Mar",trending:true,tags:["farmers","agriculture","income","central"],rating:4.5,reviews:[{id:1,name:"Ramesh Kumar",rating:5,review:"Excellent scheme! Got my installment on time. Very helpful for buying seeds.",date:"2024-12-15"},{id:2,name:"Sunita Devi",rating:4,review:"Good initiative. Process is easy via CSC.",date:"2024-11-20"}],category_color:"green"},
+  {id:2,name:"Pradhan Mantri Awas Yojana",nameHi:"प्रधानमंत्री आवास योजना",nameMr:"प्रधानमंत्री आवास योजना",state:"Central Government",category:"Housing",shortDesc:"Affordable housing for economically weaker sections and low-income groups.",shortDescHi:"आर्थिक रूप से कमजोर वर्गों के लिए किफायती आवास।",shortDescMr:"आर्थिकदृष्ट्या दुर्बल घटकांसाठी परवडणारे घर.",eligibility:"EWS/LIG families with annual income below ₹6 lakh. No pucca house.",documents:["Aadhaar Card","Income Certificate","Caste Certificate","Bank Account","Property Documents"],fullDesc:"PMAY aims to provide affordable housing to the urban and rural poor by 2024. Under PMAY-Urban, interest subsidy of up to 6.5% is available on home loans. PMAY-Gramin provides financial assistance for construction of pucca houses. The scheme covers beneficiaries from EWS, LIG, MIG-I and MIG-II categories.",onlineLink:"https://pmaymis.gov.in",offlineInfo:"Apply at your nearest Urban Local Body (ULB) or Common Service Centre (CSC).",importantDates:"Ongoing | Apply before scheme closure",trending:true,tags:["housing","home","poor","central"],rating:4.2,reviews:[{id:1,name:"Priya Singh",rating:4,review:"Got sanctioned! The process took 3 months but worth it.",date:"2024-10-05"}],category_color:"blue"},
+  {id:3,name:"Ayushman Bharat - PMJAY",nameHi:"आयुष्मान भारत - PMJAY",nameMr:"आयुष्मान भारत - PMJAY",state:"Central Government",category:"Health",shortDesc:"₹5 lakh annual health insurance for poor families — over 10 crore families covered.",shortDescHi:"गरीब परिवारों के लिए ₹5 लाख वार्षिक स्वास्थ्य बीमा।",shortDescMr:"गरीब कुटुंबांसाठी ₹5 लाख वार्षिक आरोग्य विमा.",eligibility:"Bottom 40% of India's population as per SECC database. No annual income cap.",documents:["Aadhaar Card","Ration Card","SECC/RSBY reference number","Mobile Number"],fullDesc:"Ayushman Bharat PM-JAY is the world's largest health insurance scheme. It provides a cover of ₹5 lakh per family per year for secondary and tertiary care hospitalization. The scheme covers 1,574 medical packages including surgery, medical and day care treatments, pre-existing conditions from day one.",onlineLink:"https://pmjay.gov.in",offlineInfo:"Visit nearest empanelled hospital or Common Service Centre for card generation.",importantDates:"Available year-round | Visit hospitals directly with Aadhaar",trending:true,tags:["health","insurance","hospital","central"],rating:4.7,reviews:[{id:1,name:"Mohan Lal",rating:5,review:"My father's bypass surgery was fully covered! Life-saving scheme.",date:"2024-12-01"},{id:2,name:"Geeta Sharma",rating:5,review:"Cashless treatment at private hospital. Very helpful.",date:"2024-11-15"}],category_color:"red"},
+  {id:4,name:"Beti Bachao Beti Padhao",nameHi:"बेटी बचाओ बेटी पढ़ाओ",nameMr:"बेटी बचाओ बेटी पढ़ाओ",state:"Central Government",category:"Women & Child",shortDesc:"Improve child sex ratio and promote girl education across India.",shortDescHi:"बालिका लिंगानुपात सुधारना और लड़कियों की शिक्षा को बढ़ावा।",shortDescMr:"बालिका लिंग गुणोत्तर सुधारणे आणि मुलींच्या शिक्षणाला प्रोत्साहन.",eligibility:"All girl children, particularly in districts with adverse sex ratio.",documents:["Birth Certificate","Aadhaar Card","School Enrollment Proof"],fullDesc:"BBBP is a tri-ministerial effort of Ministry of WCD, Health, and Education. It addresses the declining Child Sex Ratio and promotes welfare and education of girl children. The scheme focuses on preventing gender-biased sex selective elimination, ensuring survival & protection of girl child, and promoting education.",onlineLink:"https://wcd.nic.in/bbbp-schemes",offlineInfo:"Contact nearest Anganwadi Centre or Block Development Office.",importantDates:"Ongoing national programme",trending:false,tags:["women","girl","education","child"],rating:4.3,reviews:[],category_color:"pink"},
+  {id:5,name:"PM Mudra Yojana",nameHi:"पीएम मुद्रा योजना",nameMr:"पीएम मुद्रा योजना",state:"Central Government",category:"Finance",shortDesc:"Collateral-free loans from ₹50,000 to ₹10 lakh for small businesses.",shortDescHi:"छोटे व्यवसायों के लिए ₹50,000 से ₹10 लाख तक बिना गारंटी ऋण।",shortDescMr:"छोट्या व्यवसायांसाठी ₹50,000 ते ₹10 लाख पर्यंत तारण-मुक्त कर्ज.",eligibility:"Non-farm income generating activities. No collateral. 3 categories: Shishu/Kishor/Tarun.",documents:["Aadhaar Card","PAN Card","Business Plan","Bank Statements (6 months)","Photographs","Address Proof"],fullDesc:"MUDRA (Micro Units Development Refinance Agency) provides loans under Pradhan Mantri MUDRA Yojana. Shishu: up to ₹50,000 | Kishor: ₹50,001 to ₹5 lakh | Tarun: ₹5,00,001 to ₹10 lakh. Loans are for manufacturing, trading, service sector activities.",onlineLink:"https://www.mudra.org.in",offlineInfo:"Apply at any nationalized bank, MFI, or NBFC with business plan.",importantDates:"Applications accepted year-round",trending:true,tags:["loan","business","finance","entrepreneur"],rating:4.1,reviews:[{id:1,name:"Vikram Yadav",rating:4,review:"Got ₹3 lakh loan easily through SBI. Expanded my shop!",date:"2024-09-10"}],category_color:"amber"},
+  {id:6,name:"Skill India Mission",nameHi:"स्किल इंडिया मिशन",nameMr:"स्किल इंडिया मिशन",state:"Central Government",category:"Skill Development",shortDesc:"Free skill training with certification for youth to improve employment prospects.",shortDescHi:"युवाओं के लिए रोजगार सुधार हेतु मुफ्त कौशल प्रशिक्षण।",shortDescMr:"तरुणांसाठी रोजगार संधी सुधारण्यासाठी मोफत कौशल प्रशिक्षण.",eligibility:"Indian citizens aged 15-45 years. Various sub-schemes have different eligibility.",documents:["Aadhaar Card","Educational Certificates","Age Proof","Photograph"],fullDesc:"Skill India Mission (PMKVY - Pradhan Mantri Kaushal Vikas Yojana) aims to train over 40 crore people in India in different skills by 2022. Free short-term skill courses of 3-6 months with monetary reward for successful completion. Certificate recognized by government and industry.",onlineLink:"https://www.skillindia.gov.in",offlineInfo:"Visit nearest PMKVY Training Centre or Skill Development Centre in your district.",importantDates:"Batch registration: quarterly | Check website for dates",trending:false,tags:["skill","training","youth","employment"],rating:4.0,reviews:[],category_color:"purple"},
+  {id:7,name:"Maharashtra Shetkari Sanman Yojana",nameHi:"महाराष्ट्र शेतकरी सन्मान योजना",nameMr:"महाराष्ट्र शेतकरी सन्मान योजना",state:"Maharashtra",category:"Agriculture",shortDesc:"Debt relief and income support for Maharashtra farmers in financial distress.",shortDescHi:"महाराष्ट्र के किसानों के लिए ऋण राहत और आय सहायता।",shortDescMr:"आर्थिक संकटात असलेल्या महाराष्ट्रातील शेतकऱ्यांसाठी कर्ज माफी.",eligibility:"Maharashtra farmers with agricultural loans from cooperative or nationalized banks.",documents:["7/12 Utara","Aadhar Card","Bank Loan Documents","Ration Card"],fullDesc:"The Maharashtra Shetkari Sanman Yojana provides debt relief to farmers who are unable to repay agricultural loans. The scheme offers complete waiver of crop loans up to ₹2 lakh for eligible farmers. Additional one-time incentive of ₹50,000 for farmers who regularly repaid loans.",onlineLink:"https://mahadbt.maharashtra.gov.in",offlineInfo:"Visit Talathi office or District Collectorate with documents. Gram Panchayat can assist.",importantDates:"Registration closed | Check MahaDbt for new schemes",trending:false,tags:["farmers","loan","relief","maharashtra"],rating:3.9,reviews:[],category_color:"green"},
+  {id:8,name:"Gujarat Khedut Sahay Yojana",nameHi:"गुजरात खेडूत सहाय योजना",nameMr:"गुजरात खेडूत सहाय योजना",state:"Gujarat",category:"Agriculture",shortDesc:"Direct financial assistance to Gujarat farmers affected by natural calamities.",shortDescHi:"प्राकृतिक आपदाओं से प्रभावित गुजरात किसानों को वित्तीय सहायता।",shortDescMr:"नैसर्गिक आपत्तींमुळे प्रभावित गुजरात शेतकऱ्यांना आर्थिक सहाय्य.",eligibility:"Gujarat farmers with land records. Must have suffered crop loss due to drought/flood/cyclone.",documents:["7/12 Form","Aadhaar Card","Bank Passbook","Loss Certificate from Talati"],fullDesc:"Gujarat government provides financial relief to farmers whose crops are damaged by natural disasters. Compensation is calculated based on type of crop, extent of damage, and land area. Payments are directly transferred to farmer's bank accounts through DBT.",onlineLink:"https://ikhedut.gujarat.gov.in",offlineInfo:"Apply at nearest Talati office or District Agriculture Office in Gujarat.",importantDates:"Apply within 30 days of calamity notification",trending:false,tags:["farmers","gujarat","relief","calamity"],rating:4.1,reviews:[],category_color:"green"},
+  {id:9,name:"UP Kanya Sumangala Yojana",nameHi:"यूपी कन्या सुमंगला योजना",nameMr:"यूपी कन्या सुमंगला योजना",state:"Uttar Pradesh",category:"Women & Child",shortDesc:"₹15,000 financial support for girl children in UP across 6 life stages.",shortDescHi:"उत्तर प्रदेश में बालिकाओं को 6 चरणों में ₹15,000 की सहायता।",shortDescMr:"उत्तर प्रदेशातील मुलींना 6 टप्प्यांमध्ये ₹15,000 सहाय्य.",eligibility:"UP residents. Annual family income ≤ ₹3 lakh. Max 2 daughters per family.",documents:["Birth Certificate","Aadhaar Card","Bank Account","Income Certificate","Residence Proof"],fullDesc:"Kanya Sumangala Yojana provides financial support in 6 installments: ₹2000 at birth, ₹1000 at 1 year vaccination, ₹2000 at class 1 admission, ₹2000 at class 6 admission, ₹3000 at class 9 admission, ₹5000 at graduation. Promotes girl child welfare, education, and empowerment.",onlineLink:"https://mksy.up.gov.in",offlineInfo:"Apply at BDO office or Probation Officer in your district.",importantDates:"Applications open year-round",trending:true,tags:["girl","education","UP","women"],rating:4.6,reviews:[{id:1,name:"Anita Singh",rating:5,review:"Wonderful scheme for daughters. Got money at every stage of education.",date:"2024-11-28"}],category_color:"pink"},
+  {id:10,name:"Tamil Nadu Chief Minister's Breakfast Scheme",nameHi:"तमिलनाडु सीएम नाश्ता योजना",nameMr:"तामिळनाडू मुख्यमंत्री नाश्ता योजना",state:"Tamil Nadu",category:"Education",shortDesc:"Free nutritious breakfast for government primary school students to reduce dropout.",shortDescHi:"सरकारी प्राथमिक विद्यालयों के बच्चों को मुफ्त पौष्टिक नाश्ता।",shortDescMr:"सरकारी प्राथमिक शाळेतील मुलांना मोफत पौष्टिक नाश्ता.",eligibility:"All students enrolled in Tamil Nadu government primary schools (Classes 1-5).",documents:["School Enrollment (automatic - no application needed)"],fullDesc:"This scheme provides free breakfast to all students in government primary schools across Tamil Nadu. Menu includes idli, pongal, upma with milk. The program aims to improve nutrition, reduce absenteeism, and increase enrollment. Over 1.14 lakh students benefit daily.",onlineLink:"https://www.tnschools.gov.in",offlineInfo:"Automatic enrollment through school. Parents need not apply separately.",importantDates:"School days: Monday to Friday",trending:false,tags:["education","children","food","tamil_nadu"],rating:4.8,reviews:[],category_color:"orange"},
+  {id:11,name:"Karnataka Gruha Lakshmi Scheme",nameHi:"कर्नाटक गृह लक्ष्मी योजना",nameMr:"कर्नाटक गृह लक्ष्मी योजना",state:"Karnataka",category:"Women & Child",shortDesc:"₹2,000 per month to women heads of household in Karnataka.",shortDescHi:"कर्नाटक में परिवार की महिला मुखिया को ₹2,000 प्रति माह।",shortDescMr:"कर्नाटकातील कुटुंबातील महिला प्रमुखाला दरमहा ₹2,000.",eligibility:"Female head of household. Karnataka resident. Ration card holder.",documents:["Aadhaar Card","Ration Card","Bank Account","Residence Proof","Photograph"],fullDesc:"Gruha Lakshmi Yojana is Karnataka government's flagship scheme providing ₹2,000 per month directly to the woman of the house. The benefit is given to the female head of family who holds a BPL or APL ration card. Launched in 2023, this is one of India's largest direct benefit transfer schemes for women.",onlineLink:"https://sevasindhu.karnataka.gov.in",offlineInfo:"Apply at Gram Panchayat, Nadakacheri, or any Seva Sindhu center.",importantDates:"Applications: Open | Disbursement: Monthly",trending:true,tags:["women","Karnataka","income","household"],rating:4.4,reviews:[{id:1,name:"Lakshmi Devi",rating:5,review:"Life changing scheme! ₹2000 helps a lot for household expenses.",date:"2024-12-10"}],category_color:"pink"},
+  {id:12,name:"Rajasthan Chiranjeevi Swasthya Bima",nameHi:"राजस्थान चिरंजीवी स्वास्थ्य बीमा",nameMr:"राजस्थान चिरंजीवी आरोग्य विमा",state:"Rajasthan",category:"Health",shortDesc:"₹25 lakh annual health insurance for all Rajasthan families.",shortDescHi:"राजस्थान के सभी परिवारों के लिए ₹25 लाख का स्वास्थ्य बीमा।",shortDescMr:"राजस्थानातील सर्व कुटुंबांसाठी ₹25 लाख वार्षिक आरोग्य विमा.",eligibility:"All Rajasthan residents. BPL families: Free. Others: ₹850 annual premium.",documents:["Jan Aadhaar Card","Aadhaar Card","Ration Card"],fullDesc:"Chiranjeevi Yojana provides health insurance up to ₹25 lakh per year per family for treatment at empanelled private and government hospitals. Covers over 1,576 packages including transplants, cancer treatment, heart surgery. BPL, farmers (SMFL), contractual workers, and small traders get free coverage.",onlineLink:"https://chiranjeevi.rajasthan.gov.in",offlineInfo:"Enroll at e-Mitra centers or District Hospital with Jan Aadhaar card.",importantDates:"Premium payment: April 1-31 annually | Treatment: Year-round",trending:true,tags:["health","insurance","rajasthan","hospital"],rating:4.5,reviews:[],category_color:"red"},
+];
+
+const CHATBOT_KNOWLEDGE = `You are an expert AI assistant for India Schemes Explorer, a platform helping Indian citizens find government schemes. You speak English, Hindi, and Marathi.
+
+Key schemes in our database:
+1. PM Kisan Samman Nidhi - ₹6,000/year for farmers, 3 installments, pmkisan.gov.in
+2. PM Awas Yojana - Housing for EWS/LIG, interest subsidy up to 6.5%
+3. Ayushman Bharat PMJAY - ₹5 lakh health insurance for poor families
+4. Beti Bachao Beti Padhao - Girl child welfare and education
+5. PM Mudra Yojana - Loans ₹50K to ₹10L for small business
+6. Skill India (PMKVY) - Free skill training for youth 15-45 years
+7. Karnataka Gruha Lakshmi - ₹2,000/month for women heads of household
+8. Rajasthan Chiranjeevi - ₹25 lakh health insurance for all families
+9. UP Kanya Sumangala - ₹15,000 for girl children in 6 installments
+10. Gujarat Khedut Sahay - Farmer relief for natural calamities
+
+Respond helpfully, concisely (2-4 sentences). If user writes in Hindi or Marathi, respond in that language. Always mention relevant scheme names and how to apply when asked.`;
+
+// ─── COMPONENTS ─────────────────────────────────────────────────────────────
+
+const StarRating = ({ rating, interactive = false, onChange }) => {
+  const [hover, setHover] = useState(0);
+  return (
+    <div style={{display:'flex',gap:2}}>
+      {[1,2,3,4,5].map(s => (
+        <span key={s}
+          style={{fontSize:interactive?22:16,cursor:interactive?'pointer':'default',color:s<=(hover||rating)?'#f59e0b':'var(--border)',transition:'color .15s'}}
+          onMouseEnter={()=>interactive&&setHover(s)}
+          onMouseLeave={()=>interactive&&setHover(0)}
+          onClick={()=>interactive&&onChange&&onChange(s)}>★</span>
+      ))}
+    </div>
+  );
+};
+
+const CategoryBadge = ({ category }) => {
+  const colors = {
+    Agriculture:'green',Education:'blue',Health:'red','Women & Child':'pink',
+    Housing:'blue',Finance:'amber',Employment:'teal','Skill Development':'purple',
+    'Social Welfare':'orange','Minorities':'purple','Elderly':'gray','Disability':'teal',Sports:'green',Environment:'green'
+  };
+  const c = colors[category] || 'blue';
+  return <span className={`badge badge-${c==='teal'?'blue':c==='amber'?'orange':c==='gray'?'ghost':''+c}`}
+    style={{background:`var(--${c==='amber'?'orange':c==='teal'?'primary':c}-light,var(--primary-light))`,
+    color:`var(--${c==='amber'?'orange':c==='teal'?'primary':c},var(--primary))`}}>{category}</span>;
+};
+
+function SchemeCard({ scheme, lang, t, onSelect, onBookmark, bookmarks }) {
+  const name = lang==='hi'&&scheme.nameHi?scheme.nameHi:lang==='mr'&&scheme.nameMr?scheme.nameMr:scheme.name;
+  const desc = lang==='hi'&&scheme.shortDescHi?scheme.shortDescHi:lang==='mr'&&scheme.shortDescMr?scheme.shortDescMr:scheme.shortDesc;
+  const eli = lang==='hi'&&scheme.eligibilityHi?scheme.eligibilityHi:lang==='mr'&&scheme.eligibilityMr?scheme.eligibilityMr:scheme.eligibility;
+  const isBookmarked = bookmarks.includes(scheme.id);
+  return (
+    <div className="card fade-in" style={{padding:'20px',cursor:'pointer',position:'relative',overflow:'hidden'}} onClick={()=>onSelect(scheme)}>
+      {scheme.trending&&<div style={{position:'absolute',top:12,right:12,background:'var(--orange-light)',color:'var(--orange)',fontSize:11,fontWeight:600,padding:'3px 8px',borderRadius:999}}>🔥 {t.trending}</div>}
+      <div style={{display:'flex',alignItems:'flex-start',gap:10,marginBottom:12}}>
+        <div style={{flex:1}}>
+          <h3 style={{fontSize:15,fontWeight:600,marginBottom:6,color:'var(--text)',lineHeight:1.4}}>{name}</h3>
+          <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:8}}>
+            <CategoryBadge category={scheme.category}/>
+            <span style={{fontSize:12,color:'var(--text3)',padding:'4px 8px',background:'var(--surface2)',borderRadius:999}}>{scheme.state==='Central Government'?'🇮🇳 '+t.central:scheme.state}</span>
+          </div>
+        </div>
+      </div>
+      <p style={{fontSize:13,color:'var(--text2)',marginBottom:10,lineHeight:1.6}}>{desc}</p>
+      <p style={{fontSize:12,color:'var(--text3)',marginBottom:14,lineHeight:1.5}}><strong style={{color:'var(--text2)'}}>📋 {t.eligibility}:</strong> {eli?.substring(0,80)}...</p>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+        <div style={{display:'flex',alignItems:'center',gap:6}}>
+          <StarRating rating={scheme.rating}/>
+          <span style={{fontSize:12,color:'var(--text3)'}}>{scheme.rating}/5</span>
+        </div>
+        <div style={{display:'flex',gap:8}} onClick={e=>e.stopPropagation()}>
+          <button className="btn btn-ghost btn-sm" onClick={()=>onBookmark(scheme.id)}
+            style={{color:isBookmarked?'var(--orange)':'var(--text2)',borderColor:isBookmarked?'var(--orange)':'var(--border)'}}>
+            {isBookmarked?'🔖':' 🔖'} {isBookmarked?t.bookmarked:t.bookmarkSave}
+          </button>
+          <button className="btn btn-primary btn-sm" onClick={()=>onSelect(scheme)}>{t.learnMore}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SchemeDetail({ scheme, lang, t, onBack, onBookmark, bookmarks }) {
+  const [reviews, setReviews] = useState(scheme.reviews || []);
+  const [name2, setName2] = useState('');
+  const [reviewText, setReviewText] = useState('');
+  const [rating, setRating] = useState(0);
+  const [user] = useState(null);
+  const isBookmarked = bookmarks.includes(scheme.id);
+  const sName = lang==='hi'&&scheme.nameHi?scheme.nameHi:lang==='mr'&&scheme.nameMr?scheme.nameMr:scheme.name;
+  const sDesc = lang==='hi'&&scheme.shortDescHi?scheme.shortDescHi:lang==='mr'&&scheme.shortDescMr?scheme.shortDescMr:scheme.shortDesc;
+
+  const submitReview = () => {
+    if(!name2||!reviewText||!rating)return;
+    setReviews([...reviews,{id:Date.now(),name:name2,rating,review:reviewText,date:new Date().toISOString().slice(0,10)}]);
+    setName2('');setReviewText('');setRating(0);
+  };
+
+  return (
+    <div className="fade-in" style={{maxWidth:820,margin:'0 auto',padding:'0 0 40px'}}>
+      <button className="btn btn-ghost btn-sm" style={{marginBottom:20}} onClick={onBack}>← {t.backToList}</button>
+      
+      <div className="card" style={{padding:'28px',marginBottom:20}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',flexWrap:'wrap',gap:12,marginBottom:16}}>
+          <div style={{flex:1}}>
+            <div style={{display:'flex',gap:8,marginBottom:10,flexWrap:'wrap'}}>
+              <CategoryBadge category={scheme.category}/>
+              <span style={{fontSize:12,color:'var(--text3)',padding:'4px 8px',background:'var(--surface2)',borderRadius:999}}>{scheme.state}</span>
+              {scheme.trending&&<span style={{fontSize:12,background:'var(--orange-light)',color:'var(--orange)',padding:'4px 8px',borderRadius:999,fontWeight:600}}>🔥 Trending</span>}
+            </div>
+            <h1 style={{fontSize:24,fontWeight:700,color:'var(--text)',marginBottom:8}}>{sName}</h1>
+            <p style={{fontSize:15,color:'var(--text2)',lineHeight:1.7}}>{sDesc}</p>
+          </div>
+          <button className="btn btn-ghost btn-sm" onClick={()=>onBookmark(scheme.id)}
+            style={{color:isBookmarked?'var(--orange)':'var(--text2)',borderColor:isBookmarked?'var(--orange)':'var(--border)',whiteSpace:'nowrap'}}>
+            🔖 {isBookmarked?t.bookmarked:t.bookmarkSave}
+          </button>
+        </div>
+
+        <div style={{display:'flex',alignItems:'center',gap:8,padding:'12px 0',borderTop:'1px solid var(--border)',borderBottom:'1px solid var(--border)',marginBottom:20}}>
+          <StarRating rating={scheme.rating}/>
+          <span style={{fontSize:14,color:'var(--text2)',fontWeight:500}}>{scheme.rating}/5</span>
+          <span style={{fontSize:13,color:'var(--text3)'}}>({reviews.length} {t.reviews})</span>
+        </div>
+
+        <h3 style={{fontSize:15,fontWeight:600,marginBottom:10,color:'var(--text)'}}>📝 About this Scheme</h3>
+        <p style={{fontSize:14,color:'var(--text2)',lineHeight:1.8,marginBottom:20}}>{scheme.fullDesc}</p>
+
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:20}} className="grid-2">
+          <div style={{background:'var(--surface2)',borderRadius:12,padding:16}}>
+            <h4 style={{fontSize:13,fontWeight:600,color:'var(--text)',marginBottom:10}}>✅ {t.eligibility}</h4>
+            <p style={{fontSize:13,color:'var(--text2)',lineHeight:1.7}}>{scheme.eligibility}</p>
+          </div>
+          {scheme.importantDates&&<div style={{background:'var(--orange-light)',borderRadius:12,padding:16}}>
+            <h4 style={{fontSize:13,fontWeight:600,color:'var(--orange)',marginBottom:10}}>📅 {t.importantDates}</h4>
+            <p style={{fontSize:13,color:'var(--text2)',lineHeight:1.7}}>{scheme.importantDates}</p>
+          </div>}
+        </div>
+
+        <h3 style={{fontSize:15,fontWeight:600,marginBottom:12,color:'var(--text)'}}>📄 {t.documents}</h3>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))',gap:8,marginBottom:20}}>
+          {scheme.documents.map((d,i)=>(
+            <div key={i} style={{display:'flex',alignItems:'center',gap:8,padding:'8px 12px',background:'var(--surface2)',borderRadius:8,fontSize:13,color:'var(--text2)'}}>
+              <span style={{color:'var(--green)'}}>✓</span>{d}
+            </div>
+          ))}
+        </div>
+
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}} className="grid-2">
+          <div style={{background:'var(--green-light)',borderRadius:12,padding:16}}>
+            <h4 style={{fontSize:13,fontWeight:600,color:'var(--green)',marginBottom:10}}>🟢 {t.applyOnline}</h4>
+            <p style={{fontSize:13,color:'var(--text2)',marginBottom:12,lineHeight:1.6}}>Apply directly on the official government portal</p>
+            <a href={scheme.onlineLink} target="_blank" rel="noopener" className="btn btn-primary btn-sm" style={{width:'100%',justifyContent:'center'}}
+              onClick={e=>e.stopPropagation()}>🌐 {t.applyNow}</a>
+          </div>
+          <div style={{background:'var(--primary-light)',borderRadius:12,padding:16}}>
+            <h4 style={{fontSize:13,fontWeight:600,color:'var(--primary)',marginBottom:10}}>🔵 {t.applyOffline}</h4>
+            <p style={{fontSize:13,color:'var(--text2)',lineHeight:1.6}}>{scheme.offlineInfo}</p>
+          </div>
+        </div>
+
+        <div style={{marginTop:16,padding:'12px 16px',background:'var(--surface2)',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:8}}>
+          <span style={{fontSize:13,color:'var(--text2)'}}>🔗 {t.officialWebsite}: <a href={scheme.onlineLink} target="_blank" rel="noopener" style={{color:'var(--primary)'}}>{scheme.onlineLink}</a></span>
+        </div>
+      </div>
+
+      <div className="card" style={{padding:'24px'}}>
+        <h3 style={{fontSize:17,fontWeight:600,marginBottom:20,color:'var(--text)'}}>💬 {t.reviews}</h3>
+        {reviews.map(r=>(
+          <div key={r.id} style={{padding:'14px 0',borderBottom:'1px solid var(--border)'}}>
+            <div style={{display:'flex',justifyContent:'space-between',marginBottom:6}}>
+              <div style={{display:'flex',alignItems:'center',gap:10}}>
+                <div style={{width:34,height:34,borderRadius:'50%',background:'var(--primary-light)',color:'var(--primary)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:600}}>{r.name[0]}</div>
+                <div>
+                  <div style={{fontSize:13,fontWeight:600,color:'var(--text)'}}>{r.name}</div>
+                  <div style={{fontSize:11,color:'var(--text3)'}}>{r.date}</div>
+                </div>
+              </div>
+              <StarRating rating={r.rating}/>
+            </div>
+            <p style={{fontSize:14,color:'var(--text2)',lineHeight:1.6,paddingLeft:44}}>{r.review}</p>
+          </div>
+        ))}
+        {reviews.length===0&&<p style={{color:'var(--text3)',fontSize:14,textAlign:'center',padding:'20px 0'}}>No reviews yet. Be the first!</p>}
+        
+        <div style={{marginTop:20,padding:16,background:'var(--surface2)',borderRadius:12}}>
+          <h4 style={{fontSize:14,fontWeight:600,marginBottom:14,color:'var(--text)'}}>✍️ {t.writeReview}</h4>
+          <div style={{marginBottom:12}}>
+            <label style={{fontSize:12,color:'var(--text2)',marginBottom:6,display:'block'}}>{t.rating}</label>
+            <StarRating rating={rating} interactive onChange={setRating}/>
+          </div>
+          <input placeholder={t.yourName} value={name2} onChange={e=>setName2(e.target.value)} style={{marginBottom:10}}/>
+          <textarea placeholder={t.yourReview} value={reviewText} onChange={e=>setReviewText(e.target.value)} style={{minHeight:80,resize:'vertical',marginBottom:12}}/>
+          <button className="btn btn-primary" onClick={submitReview} style={{width:'100%',justifyContent:'center'}}>{t.submitReview}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ChatWidget({ lang, t, isOpen, onClose }) {
+  const [msgs, setMsgs] = useState([{role:'ai',text:`🙏 ${lang==='hi'?'नमस्ते! मैं भारत योजना सहायक हूं। आप किस योजना के बारे में जानना चाहते हैं?':lang==='mr'?'नमस्कार! मी भारत योजना सहाय्यक आहे. तुम्हाला कोणत्या योजनेबद्दल जाणून घ्यायचे आहे?':'Hello! I am your India Schemes AI Assistant. Ask me about any government scheme, eligibility, documents, or how to apply!'}`}]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const bottomRef = useRef();
+  useEffect(()=>bottomRef.current?.scrollIntoView({behavior:'smooth'}),[msgs]);
+
+  const send = async () => {
+    if(!input.trim()||loading)return;
+    const userMsg = input;
+    setInput('');
+    setMsgs(m=>[...m,{role:'user',text:userMsg}]);
+    setLoading(true);
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',max_tokens:400,
+          system:CHATBOT_KNOWLEDGE,
+          messages:[...msgs.filter(m=>m.role!=='ai'||msgs.indexOf(m)>0).map(m=>({role:m.role==='ai'?'assistant':'user',content:m.text})),{role:'user',content:userMsg}]
+        })
+      });
+      const data = await res.json();
+      const reply = data.content?.[0]?.text || "Sorry, I couldn't get a response. Please try again.";
+      setMsgs(m=>[...m,{role:'ai',text:reply}]);
+    } catch(e) {
+      setMsgs(m=>[...m,{role:'ai',text:'Unable to connect to AI. Please try again later.'}]);
+    }
+    setLoading(false);
+  };
+
+  if(!isOpen)return null;
+  return (
+    <div style={{position:'fixed',bottom:90,right:20,width:360,maxWidth:'calc(100vw - 32px)',background:'var(--surface)',borderRadius:20,boxShadow:'0 20px 60px rgba(0,0,0,.2)',border:'1px solid var(--border)',zIndex:1000,display:'flex',flexDirection:'column',height:480}}>
+      <div style={{padding:'16px 20px',borderBottom:'1px solid var(--border)',display:'flex',justifyContent:'space-between',alignItems:'center',background:'var(--primary)',borderRadius:'20px 20px 0 0'}}>
+        <div>
+          <div style={{fontSize:14,fontWeight:600,color:'#fff'}}>🤖 {t.chatTitle}</div>
+          <div style={{fontSize:11,color:'rgba(255,255,255,.7)'}}>Powered by Claude AI • EN / हि / मर</div>
+        </div>
+        <button onClick={onClose} style={{background:'rgba(255,255,255,.2)',border:'none',color:'#fff',width:28,height:28,borderRadius:'50%',cursor:'pointer',fontSize:16}}>×</button>
+      </div>
+      <div style={{flex:1,overflowY:'auto',padding:16,display:'flex',flexDirection:'column',gap:12}}>
+        {msgs.map((m,i)=>(
+          <div key={i} className={m.role==='user'?'chat-bubble-user':'chat-bubble-ai'} style={{alignSelf:m.role==='user'?'flex-end':'flex-start',lineHeight:1.6}}>{m.text}</div>
+        ))}
+        {loading&&<div className="chat-bubble-ai" style={{display:'flex',gap:6,alignItems:'center'}}>
+          <div className="typing-dot" style={{animationDelay:'0s'}}/>
+          <div className="typing-dot" style={{animationDelay:'.2s'}}/>
+          <div className="typing-dot" style={{animationDelay:'.4s'}}/>
+        </div>}
+        <div ref={bottomRef}/>
+      </div>
+      <div style={{padding:'12px 16px',borderTop:'1px solid var(--border)',display:'flex',gap:8}}>
+        <input value={input} onChange={e=>setInput(e.target.value)} placeholder={t.chatPlaceholder} onKeyDown={e=>e.key==='Enter'&&send()} style={{flex:1,fontSize:13}}/>
+        <button className="btn btn-primary btn-sm" onClick={send} disabled={loading}>{loading?'...':t.send}</button>
+      </div>
+    </div>
+  );
+}
+
+function RecommendWidget({ t, schemes, onSelect }) {
+  const [age, setAge] = useState('');
+  const [income, setIncome] = useState('');
+  const [result, setResult] = useState(null);
+
+  const getRecommendations = () => {
+    const a = parseInt(age), inc = parseInt(income);
+    let recs = [...schemes];
+    if(a && a < 35) recs = recs.filter(s=>['Skill Development','Education','Finance','Women & Child'].includes(s.category));
+    if(a && a > 60) recs = recs.filter(s=>['Health','Social Welfare','Finance'].includes(s.category));
+    if(inc && inc < 200000) recs = recs.filter(s=>['Health','Housing','Agriculture','Finance'].includes(s.category));
+    recs = recs.slice(0,3);
+    setResult(recs.length?recs:schemes.slice(0,3));
+  };
+
+  return (
+    <div className="card" style={{padding:24,marginBottom:24}}>
+      <h3 style={{fontSize:17,fontWeight:600,marginBottom:16,color:'var(--text)'}}>🎯 {t.recommend}</h3>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr auto',gap:12,alignItems:'end',flexWrap:'wrap'}}>
+        <div>
+          <label style={{fontSize:12,color:'var(--text2)',marginBottom:6,display:'block'}}>👤 {t.age}</label>
+          <input type="number" placeholder="e.g. 28" value={age} onChange={e=>setAge(e.target.value)} min="0" max="120"/>
+        </div>
+        <div>
+          <label style={{fontSize:12,color:'var(--text2)',marginBottom:6,display:'block'}}>💰 {t.income}</label>
+          <input type="number" placeholder="e.g. 250000" value={income} onChange={e=>setIncome(e.target.value)}/>
+        </div>
+        <button className="btn btn-primary" onClick={getRecommendations} style={{whiteSpace:'nowrap'}}>{t.getRecommendations}</button>
+      </div>
+      {result&&<div style={{marginTop:16,display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))',gap:12}}>
+        {result.map(s=>(
+          <div key={s.id} onClick={()=>onSelect(s)} style={{background:'var(--primary-light)',borderRadius:12,padding:14,cursor:'pointer',border:'1px solid var(--border)'}}>
+            <div style={{fontSize:13,fontWeight:600,color:'var(--text)',marginBottom:6}}>{s.name}</div>
+            <CategoryBadge category={s.category}/>
+            <p style={{fontSize:12,color:'var(--text2)',marginTop:8,lineHeight:1.5}}>{s.shortDesc?.substring(0,70)}...</p>
+          </div>
+        ))}
+      </div>}
+    </div>
+  );
+}
+
+// ─── MAIN APP ────────────────────────────────────────────────────────────────
+
+function App() {
+  const [lang, setLang] = useState('en');
+  const [dark, setDark] = useState(false);
+  const [page, setPage] = useState('home');
+  const [selectedScheme, setSelectedScheme] = useState(null);
+  const [search, setSearch] = useState('');
+  const [filterState, setFilterState] = useState('');
+  const [filterCat, setFilterCat] = useState('');
+  const [bookmarks, setBookmarks] = useState([]);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [showLogin, setShowLogin] = useState(false);
+  const [loginU, setLoginU] = useState('');
+  const [loginP, setLoginP] = useState('');
+  const [adminMode, setAdminMode] = useState(false);
+  const [schemes, setSchemes] = useState(SCHEMES);
+
+  const t = TRANSLATIONS[lang];
+  useEffect(()=>{document.documentElement.className=dark?'dark':'';},[dark]);
+
+  const filtered = schemes.filter(s=>{
+    const q=search.toLowerCase();
+    const matchQ=!q||s.name.toLowerCase().includes(q)||s.category.toLowerCase().includes(q)||(s.tags||[]).some(tag=>tag.includes(q))||(s.shortDesc||'').toLowerCase().includes(q);
+    const matchS=!filterState||s.state===filterState;
+    const matchC=!filterCat||s.category===filterCat;
+    return matchQ&&matchS&&matchC;
+  });
+
+  const toggleBookmark = id => setBookmarks(b=>b.includes(id)?b.filter(x=>x!==id):[...b,id]);
+
+  const handleLogin = () => {
+    if(loginU==='admin'&&loginP==='admin123'){setUser({name:'Admin',role:'admin'});setAdminMode(true);}
+    else if(loginU==='user'&&loginP==='pass123'){setUser({name:'Citizen User',role:'user'});}
+    else{alert('Invalid credentials. Try user/pass123 or admin/admin123');return;}
+    setShowLogin(false);setLoginU('');setLoginP('');
+  };
+
+  const openScheme = s => {setSelectedScheme(s);setPage('detail');window.scrollTo(0,0);};
+
+  return (
+    <div style={{minHeight:'100vh',background:'var(--bg)',color:'var(--text)'}}>
+      {/* NAVBAR */}
+      <nav style={{position:'sticky',top:0,zIndex:100,background:'var(--surface)',borderBottom:'1px solid var(--border)',boxShadow:'0 1px 12px rgba(67,97,238,.08)'}}>
+        <div style={{maxWidth:1200,margin:'0 auto',padding:'0 20px',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',gap:16}}>
+          <div style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer'}} onClick={()=>{setPage('home');setSelectedScheme(null);}}>
+            <span style={{fontSize:26}}>🇮🇳</span>
+            <span style={{fontSize:16,fontWeight:700,color:'var(--primary)',whiteSpace:'nowrap'}}>{t.appName}</span>
+          </div>
+          <div className="hide-mobile" style={{display:'flex',gap:4}}>
+            {['home','schemes','saved','chat'].map(p=>(
+              <button key={p} onClick={()=>{if(p==='chat'){setChatOpen(o=>!o);}else{setPage(p);setSelectedScheme(null);}}}
+                className="btn btn-ghost btn-sm"
+                style={{color:page===p?'var(--primary)':'var(--text2)',borderColor:page===p?'var(--primary)':'transparent',background:page===p?'var(--primary-light)':'transparent'}}>
+                {p==='home'?'🏠':p==='schemes'?'📋':p==='saved'?'🔖':p==='chat'?'🤖':''} {t[p]}
+              </button>
+            ))}
+          </div>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <select value={lang} onChange={e=>setLang(e.target.value)} style={{padding:'6px 10px',fontSize:13,width:'auto'}}>
+              <option value="en">EN</option>
+              <option value="hi">हि</option>
+              <option value="mr">मर</option>
+            </select>
+            <button className="btn btn-ghost btn-sm" onClick={()=>setDark(d=>!d)} style={{padding:'6px 10px'}}>{dark?'☀️':'🌙'}</button>
+            {user?
+              <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                <span style={{fontSize:13,color:'var(--text2)',whiteSpace:'nowrap'}}>👤 {user.name}</span>
+                <button className="btn btn-ghost btn-sm" onClick={()=>{setUser(null);setAdminMode(false);}}>{t.logout}</button>
+              </div>:
+              <button className="btn btn-primary btn-sm" onClick={()=>setShowLogin(true)}>{t.login}</button>
+            }
+          </div>
+        </div>
+      </nav>
+
+      {/* LOGIN MODAL */}
+      {showLogin&&<div style={{position:'fixed',inset:0,background:'rgba(0,0,0,.5)',zIndex:500,display:'flex',alignItems:'center',justifyContent:'center'}} onClick={()=>setShowLogin(false)}>
+        <div className="card" style={{width:360,padding:28}} onClick={e=>e.stopPropagation()}>
+          <h2 style={{fontSize:20,fontWeight:700,marginBottom:6,color:'var(--text)'}}>{t.loginTitle}</h2>
+          <p style={{fontSize:12,color:'var(--text3)',marginBottom:20}}>{t.demoHint} | admin / admin123</p>
+          <input placeholder={t.username} value={loginU} onChange={e=>setLoginU(e.target.value)} style={{marginBottom:12}}/>
+          <input type="password" placeholder={t.password} value={loginP} onChange={e=>setLoginP(e.target.value)} style={{marginBottom:16}} onKeyDown={e=>e.key==='Enter'&&handleLogin()}/>
+          <button className="btn btn-primary" onClick={handleLogin} style={{width:'100%',justifyContent:'center'}}>{t.signIn}</button>
+          <button className="btn btn-ghost" onClick={()=>setShowLogin(false)} style={{width:'100%',justifyContent:'center',marginTop:8}}>Cancel</button>
+        </div>
+      </div>}
+
+      <main style={{maxWidth:1200,margin:'0 auto',padding:'24px 20px'}}>
+
+        {/* HOME PAGE */}
+        {page==='home'&&!selectedScheme&&<>
+          {/* HERO */}
+          <div style={{textAlign:'center',padding:'40px 20px 32px',background:'linear-gradient(135deg,var(--primary-light) 0%,var(--purple-light) 100%)',borderRadius:24,marginBottom:32,border:'1px solid var(--border)'}}>
+            <div style={{fontSize:48,marginBottom:12}}>🇮🇳</div>
+            <h1 style={{fontSize:32,fontWeight:800,color:'var(--text)',marginBottom:12,lineHeight:1.3}}>{t.tagline}</h1>
+            <p style={{fontSize:16,color:'var(--text2)',marginBottom:24,maxWidth:560,margin:'0 auto 24px'}}>Explore 100+ central & state government schemes. Filter by state, category, and language.</p>
+            <div style={{maxWidth:600,margin:'0 auto',display:'flex',gap:12,flexWrap:'wrap',justifyContent:'center'}}>
+              <div style={{flex:'2 1 280px',position:'relative'}}>
+                <span style={{position:'absolute',left:12,top:'50%',transform:'translateY(-50%)',color:'var(--text3)',fontSize:16}}>🔍</span>
+                <input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t.searchPlaceholder} style={{paddingLeft:38,fontSize:15}}/>
+              </div>
+              <select value={filterState} onChange={e=>setFilterState(e.target.value)} style={{flex:'1 1 160px'}}>
+                <option value="">{t.allStates}</option>
+                {STATES.map(s=><option key={s} value={s}>{s}</option>)}
+              </select>
+              <button className="btn btn-primary" onClick={()=>setPage('schemes')} style={{whiteSpace:'nowrap'}}>🔎 Search</button>
+            </div>
+          </div>
+
+          {/* STATS */}
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:16,marginBottom:32}}>
+            {[['📋','100+','Schemes'],['🏛️','28+','States Covered'],['🌐','3','Languages'],['👥','50 Cr+','Beneficiaries']].map(([icon,val,label])=>(
+              <div key={label} style={{background:'var(--surface)',borderRadius:14,padding:'18px 16px',textAlign:'center',border:'1px solid var(--border)',boxShadow:'var(--shadow)'}}>
+                <div style={{fontSize:28,marginBottom:4}}>{icon}</div>
+                <div style={{fontSize:22,fontWeight:700,color:'var(--primary)'}}>{val}</div>
+                <div style={{fontSize:12,color:'var(--text3)'}}>{label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* RECOMMEND */}
+          <RecommendWidget t={t} schemes={schemes} onSelect={openScheme}/>
+
+          {/* TRENDING */}
+          <h2 style={{fontSize:20,fontWeight:700,marginBottom:16,color:'var(--text)'}}>🔥 {t.featuredSchemes}</h2>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(320px,1fr))',gap:20,marginBottom:36}} className="grid-3">
+            {schemes.filter(s=>s.trending).map(s=>(
+              <SchemeCard key={s.id} scheme={s} lang={lang} t={t} onSelect={openScheme} onBookmark={toggleBookmark} bookmarks={bookmarks}/>
+            ))}
+          </div>
+
+          {/* HOW IT WORKS */}
+          <div style={{background:'var(--surface)',borderRadius:20,padding:28,border:'1px solid var(--border)',marginBottom:32}}>
+            <h2 style={{fontSize:20,fontWeight:700,marginBottom:20,textAlign:'center',color:'var(--text)'}}>{t.howItWorks}</h2>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:20}}>
+              {[[1,'🗺️',t.step1,t.step1Desc,'var(--primary-light)','var(--primary)'],[2,'🏷️',t.step2,t.step2Desc,'var(--green-light)','var(--green)'],[3,'🖥️',t.step3,t.step3Desc,'var(--orange-light)','var(--orange)']].map(([n,icon,title,desc,bg,col])=>(
+                <div key={n} style={{textAlign:'center',padding:20,background:bg,borderRadius:16}}>
+                  <div style={{width:48,height:48,borderRadius:'50%',background:'white',display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,margin:'0 auto 12px',boxShadow:'0 2px 8px rgba(0,0,0,.1)'}}>{icon}</div>
+                  <div style={{fontSize:12,fontWeight:700,color:col,marginBottom:6}}>STEP {n}</div>
+                  <div style={{fontSize:14,fontWeight:600,color:'var(--text)',marginBottom:6}}>{title}</div>
+                  <div style={{fontSize:13,color:'var(--text2)',lineHeight:1.5}}>{desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* BROWSE BY CATEGORY */}
+          <h2 style={{fontSize:20,fontWeight:700,marginBottom:16,color:'var(--text)'}}>📂 Browse by Category</h2>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))',gap:12,marginBottom:32}}>
+            {CATEGORIES.map(cat=>{
+              const icons = {Education:'📚',Agriculture:'🌾',Health:'🏥','Women & Child':'👩',Housing:'🏠',Finance:'💰',Employment:'💼','Skill Development':'🛠️','Social Welfare':'🤝',Minorities:'🌍',Elderly:'👴',Disability:'♿',Sports:'⚽',Environment:'🌿'};
+              return <button key={cat} onClick={()=>{setFilterCat(cat);setPage('schemes');}}
+                style={{padding:'14px 10px',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:12,cursor:'pointer',textAlign:'center',transition:'all .2s'}}
+                onMouseEnter={e=>e.currentTarget.style.transform='translateY(-2px)'}
+                onMouseLeave={e=>e.currentTarget.style.transform=''}>
+                <div style={{fontSize:24,marginBottom:6}}>{icons[cat]||'📋'}</div>
+                <div style={{fontSize:12,fontWeight:500,color:'var(--text2)'}}>{cat}</div>
+              </button>;
+            })}
+          </div>
+        </>}
+
+        {/* SCHEMES PAGE */}
+        {page==='schemes'&&!selectedScheme&&<>
+          <div style={{marginBottom:24}}>
+            <h1 style={{fontSize:24,fontWeight:700,marginBottom:4,color:'var(--text)'}}>📋 {t.schemes}</h1>
+            <p style={{fontSize:14,color:'var(--text3)'}}>{filtered.length} schemes found</p>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:12,marginBottom:24,alignItems:'end'}}>
+            <div style={{position:'relative'}}>
+              <span style={{position:'absolute',left:12,top:'50%',transform:'translateY(-50%)',color:'var(--text3)'}}>🔍</span>
+              <input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t.searchPlaceholder} style={{paddingLeft:38}}/>
+            </div>
+            <select value={filterState} onChange={e=>setFilterState(e.target.value)}>
+              <option value="">{t.allStates}</option>
+              {STATES.map(s=><option key={s} value={s}>{s}</option>)}
+            </select>
+            <select value={filterCat} onChange={e=>setFilterCat(e.target.value)}>
+              <option value="">{t.allCategories}</option>
+              {CATEGORIES.map(c=><option key={c} value={c}>{c}</option>)}
+            </select>
+            {(search||filterState||filterCat)&&<button className="btn btn-ghost btn-sm" onClick={()=>{setSearch('');setFilterState('');setFilterCat('');}}>✕ Clear</button>}
+          </div>
+          {filtered.length===0?<p style={{textAlign:'center',color:'var(--text3)',padding:'40px 0',fontSize:16}}>{t.noSchemes}</p>:
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(320px,1fr))',gap:20}} className="grid-3">
+              {filtered.map(s=><SchemeCard key={s.id} scheme={s} lang={lang} t={t} onSelect={openScheme} onBookmark={toggleBookmark} bookmarks={bookmarks}/>)}
+            </div>
+          }
+        </>}
+
+        {/* SAVED PAGE */}
+        {page==='saved'&&!selectedScheme&&<>
+          <h1 style={{fontSize:24,fontWeight:700,marginBottom:20,color:'var(--text)'}}>🔖 {t.savedSchemes}</h1>
+          {bookmarks.length===0?<div style={{textAlign:'center',padding:'60px 20px'}}>
+            <div style={{fontSize:48,marginBottom:12}}>🔖</div>
+            <p style={{color:'var(--text3)',fontSize:16}}>No saved schemes yet. Bookmark schemes to see them here!</p>
+            <button className="btn btn-primary" style={{marginTop:16}} onClick={()=>setPage('schemes')}>Browse Schemes</button>
+          </div>:
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(320px,1fr))',gap:20}} className="grid-3">
+              {schemes.filter(s=>bookmarks.includes(s.id)).map(s=><SchemeCard key={s.id} scheme={s} lang={lang} t={t} onSelect={openScheme} onBookmark={toggleBookmark} bookmarks={bookmarks}/>)}
+            </div>
+          }
+        </>}
+
+        {/* ADMIN PANEL */}
+        {adminMode&&page==='home'&&<div className="card" style={{padding:24,marginTop:24,borderColor:'var(--orange)'}}>
+          <h3 style={{fontSize:16,fontWeight:600,marginBottom:16,color:'var(--orange)'}}>🔐 Admin Panel</h3>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:12}}>
+            <div style={{background:'var(--surface2)',borderRadius:12,padding:16,textAlign:'center'}}>
+              <div style={{fontSize:32,fontWeight:700,color:'var(--primary)'}}>{schemes.length}</div>
+              <div style={{fontSize:13,color:'var(--text2)'}}>Total Schemes</div>
+            </div>
+            <div style={{background:'var(--surface2)',borderRadius:12,padding:16,textAlign:'center'}}>
+              <div style={{fontSize:32,fontWeight:700,color:'var(--green)'}}>{schemes.reduce((a,s)=>a+s.reviews.length,0)}</div>
+              <div style={{fontSize:13,color:'var(--text2)'}}>Total Reviews</div>
+            </div>
+            <div style={{background:'var(--surface2)',borderRadius:12,padding:16,textAlign:'center'}}>
+              <div style={{fontSize:32,fontWeight:700,color:'var(--orange)'}}>{bookmarks.length}</div>
+              <div style={{fontSize:13,color:'var(--text2)'}}>Bookmarked</div>
+            </div>
+          </div>
+          <p style={{fontSize:13,color:'var(--text3)',marginTop:12}}>Admin features: View all schemes, moderate reviews, export data. Full backend integration needed for production.</p>
+        </div>}
+
+        {/* SCHEME DETAIL */}
+        {selectedScheme&&<SchemeDetail scheme={selectedScheme} lang={lang} t={t} onBack={()=>{setSelectedScheme(null);}} onBookmark={toggleBookmark} bookmarks={bookmarks}/>}
+      </main>
+
+      {/* AI CHAT BUTTON */}
+      <button onClick={()=>setChatOpen(o=>!o)}
+        style={{position:'fixed',bottom:20,right:20,width:56,height:56,borderRadius:'50%',background:'var(--primary)',color:'#fff',border:'none',cursor:'pointer',fontSize:24,boxShadow:'0 4px 20px rgba(67,97,238,.4)',zIndex:999,transition:'all .2s'}}
+        onMouseEnter={e=>{e.currentTarget.style.transform='scale(1.1)';}}
+        onMouseLeave={e=>{e.currentTarget.style.transform='scale(1)';}}>🤖</button>
+
+      <ChatWidget lang={lang} t={t} isOpen={chatOpen} onClose={()=>setChatOpen(false)}/>
+
+      {/* FOOTER */}
+      <footer style={{background:'var(--surface)',borderTop:'1px solid var(--border)',padding:'32px 20px',marginTop:40}}>
+        <div style={{maxWidth:1200,margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:24}}>
+          <div>
+            <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:10}}><span style={{fontSize:24}}>🇮🇳</span><span style={{fontSize:16,fontWeight:700,color:'var(--primary)'}}>India Schemes</span></div>
+            <p style={{fontSize:13,color:'var(--text3)',lineHeight:1.7}}>Empowering citizens to discover and apply for government schemes in their language.</p>
+          </div>
+          <div>
+            <h4 style={{fontSize:13,fontWeight:600,color:'var(--text)',marginBottom:10}}>Quick Links</h4>
+            {['Home','All Schemes','Saved Schemes','AI Assistant'].map(l=><div key={l} style={{fontSize:13,color:'var(--text3)',marginBottom:6,cursor:'pointer'}} onClick={()=>setPage(l==='AI Assistant'?'home':l.toLowerCase().replace(' ','')==='allschemes'?'schemes':l.toLowerCase())}>{l}</div>)}
+          </div>
+          <div>
+            <h4 style={{fontSize:13,fontWeight:600,color:'var(--text)',marginBottom:10}}>Categories</h4>
+            {CATEGORIES.slice(0,5).map(c=><div key={c} style={{fontSize:13,color:'var(--text3)',marginBottom:6,cursor:'pointer'}} onClick={()=>{setFilterCat(c);setPage('schemes');}}>{c}</div>)}
+          </div>
+          <div>
+            <h4 style={{fontSize:13,fontWeight:600,color:'var(--text)',marginBottom:10}}>Official Links</h4>
+            {[['India.gov.in','https://india.gov.in'],['MyScheme Portal','https://www.myscheme.gov.in'],['JAM Trilogy','https://dbtbharat.gov.in']].map(([n,u])=><a key={n} href={u} target="_blank" rel="noopener" style={{display:'block',fontSize:13,color:'var(--primary)',marginBottom:6,textDecoration:'none'}}>{n} ↗</a>)}
+          </div>
+        </div>
+        <div style={{maxWidth:1200,margin:'20px auto 0',paddingTop:16,borderTop:'1px solid var(--border)',textAlign:'center',fontSize:12,color:'var(--text3)'}}>
+          Built with ❤️ for Indian citizens | Data sourced from official government portals | Not an official government website
+        </div>
+      </footer>
+
+      {/* MOBILE BOTTOM NAV */}
+      <div style={{position:'fixed',bottom:0,left:0,right:0,background:'var(--surface)',borderTop:'1px solid var(--border)',display:'flex',justifyContent:'space-around',padding:'8px 0',zIndex:50}} className="mobile-nav">
+        <style>{`@media(min-width:769px){.mobile-nav{display:none!important}}`}</style>
+        {[['home','🏠','Home'],['schemes','📋','Schemes'],['saved','🔖','Saved'],['chat','🤖','AI']].map(([p,icon,label])=>(
+          <button key={p} onClick={()=>{if(p==='chat')setChatOpen(o=>!o);else{setPage(p);setSelectedScheme(null);}}}
+            style={{background:'none',border:'none',cursor:'pointer',display:'flex',flexDirection:'column',alignItems:'center',gap:2,padding:'4px 12px',color:page===p?'var(--primary)':'var(--text3)'}}>
+            <span style={{fontSize:22}}>{icon}</span>
+            <span style={{fontSize:10,fontWeight:page===p?600:400}}>{label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
