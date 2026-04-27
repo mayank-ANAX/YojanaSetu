@@ -165,6 +165,8 @@ const TRANSLATIONS = {
     poweredBy: "Powered by  Mayank",
     schemesAvail: "schemes available for Maharashtra residents",
     invalidLogin: "Invalid credentials. Try user/pass123 or admin/admin123",
+    contactUs: "Contact Us",
+    contactEmail: "ruralinnovators04@gmail.com",
   },
   hi: {
     appName: "योजना सेतु",
@@ -239,6 +241,8 @@ const TRANSLATIONS = {
     poweredBy: "मयंक द्वारा संचालित",
     schemesAvail: "महाराष्ट्र निवासियों के लिए योजनाएं उपलब्ध",
     invalidLogin: "अमान्य क्रेडेंशियल। user/pass123 या admin/admin123 आज़माएं",
+    contactUs: "संपर्क करें",
+    contactEmail: "ruralinnovators04@gmail.com",
   },
   mr: {
     appName: "योजना सेतु",
@@ -313,6 +317,8 @@ const TRANSLATIONS = {
     poweredBy: "मयंक द्वारे समर्थित",
     schemesAvail: "महाराष्ट्र रहिवाशांसाठी योजना उपलब्ध",
     invalidLogin: "अवैध क्रेडेन्शियल. user/pass123 किंवा admin/admin123 वापरा",
+    contactUs: "संपर्क करा",
+    contactEmail: "ruralinnovators04@gmail.com",
   }
 };
 
@@ -893,6 +899,12 @@ function App() {
           <div>
             <h4 style={{fontSize:13,fontWeight:600,color:"var(--text)",marginBottom:10}}>{t.officialLinks}</h4>
             {[["India.gov.in","https://india.gov.in"],["MyScheme Portal","https://www.myscheme.gov.in"],["MahaDbt Portal","https://mahadbt.maharashtra.gov.in"],["Aaple Sarkar","https://aaplesarkar.mahaonline.gov.in"]].map(([n,u])=><a key={n} href={u} target="_blank" rel="noopener" style={{display:"block",fontSize:13,color:"var(--primary)",marginBottom:6,textDecoration:"none"}}>{n} ↗</a>)}
+          </div>
+          <div>
+            <h4 style={{fontSize:13,fontWeight:600,color:"var(--text)",marginBottom:10}}>{t.contactUs}</h4>
+            <a href={`mailto:${t.contactEmail}`} style={{display:"flex",alignItems:"center",gap:6,fontSize:13,color:"var(--primary)",textDecoration:"none",wordBreak:"break-all"}}>
+              <span>✉️</span>{t.contactEmail}
+            </a>
           </div>
         </div>
         <div style={{maxWidth:1200,margin:"20px auto 0",paddingTop:16,borderTop:"1px solid var(--border)",textAlign:"center",fontSize:12,color:"var(--text3)"}}>
